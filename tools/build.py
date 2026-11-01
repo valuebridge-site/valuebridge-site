@@ -119,7 +119,7 @@ def build():
     d = 0
     depts = "".join(f"""<a class="tile" href="departments/{a}.html"><svg viewBox="0 0 24 24" aria-hidden="true">{ICONS[a]}</svg>
 <h3>{E(b)}</h3><p>{E(c)}</p><span class="count">{(lambda n: f"{n} product" + ("" if n == 1 else "s"))(sum(1 for p in C.P if p['dept']==a))}</span></a>""" for a, b, c in C.DEPARTMENTS)
-    colls = "".join(f'<a class="chip" href="collections/{a}.html">{E(b)} <span>{sum(1 for p in C.P if p["coll"]==a)}</span></a>' for a, b, _ in C.COLLECTIONS)
+    colls = "".join(f'<a class="chip" href="collections/{a}.html">{E(b)} <span>{sum(1 for p in C.P if p["coll"]==a or a in p["also"])}</span></a>' for a, b, _ in C.COLLECTIONS)
     first = [p for p in C.P if p["web"] == "testing"]
     body = f"""<section class="hero"><div class="wrap">
 <h1>Digital solutions tailored to you.</h1>
@@ -169,7 +169,7 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
 
     # ---------- collections ----------
     for a, b, c in C.COLLECTIONS:
-        ps = order([p for p in C.P if p["coll"] == a])
+        ps = order([p for p in C.P if p["coll"] == a or a in p["also"]])
         bl = [x for x in C.BUNDLES if x[4] == a]
         bh = ""
         if bl:

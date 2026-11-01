@@ -30,6 +30,7 @@ COLLECTIONS = [
     ("project-management", "Project Management", "Project packs, reporting templates and dashboards."),
     ("security-operations", "Security & Operations", "Security audits, plans and reports, and operations management resources."),
     ("research", "Research & Analysis", "Software for qualitative and statistical research analysis."),
+    ("lifestyle-solutions", "Lifestyle Solutions", "Tools for your home, household money and everyday life."),
 ]
 
 WEB_STATUS = {
@@ -54,6 +55,7 @@ def add(**k):
     k.setdefault("bundles", [])
     k.setdefault("checks", 0)
     k.setdefault("checks_note", "")
+    k.setdefault("also", [])
     P.append(k)
 
 
@@ -162,7 +164,7 @@ add(slug="financial-dashboard-kit", name="Small Business Financial Dashboard Kit
     blockers="Accountant review (required); support email; desktop Excel test; lawyer review",
     reviewer="R06d Accountant", web="review", bundles=["business-starter"], listing="claude/ValueBridge_Financial_Dashboard_Listing.md")
 
-add(slug="personal-budget-system", name="Personal Budget System", version="1.0", dept="lifestyle", coll="finance",
+add(slug="personal-budget-system", name="Personal Budget System", version="1.0", dept="lifestyle", coll="lifestyle-solutions", also=["finance"],
     tier="B", route="Gate B", wave="Launch", price="29", fmt="Excel workbooks (Blank + Example)",
     short="One connected workbook for your money: log a payment once and your budget, accounts, goals and net worth update.",
     bullets=["Budget with a 'left to assign' check and a monthly review",
@@ -452,6 +454,19 @@ for slug, nm, dept, coll, tier, rev, fmt, sh, url in [
         price="TBA", fmt=fmt, short=sh, bullets=["Full details will be published at release"],
         gates=g("N", "P", "N", "N", "N", "N"), checks=0, checks_note="No listing doc yet",
         blockers=NEW_BLOCK, reviewer=rev, web="new", bundles=[], listing="None yet (artifact: " + url + ")")
+
+# ---------------- Lifestyle web-app drafts (status note: working drafts; must move to ValueBridge hosting before sale) ----------------
+for slug, nm, sh, url in [
+    ("kingston-basket", "Kingston Basket", "A household shopping and grocery planning app.", "https://claude.ai/artifact/UjrmT71PfsTM55urszYaav"),
+    ("home-improvement-planner", "Property & Home Improvement Planner", "Plan home improvement projects: scope, budget and progress in one place.", "https://claude.ai/artifact/T9hwvRBTu7zMoVEkxHf6oG"),
+    ("room-yard-planner", "Room & Yard Planner", "Sketch and plan room and yard layouts before you buy or build.", "https://claude.ai/artifact/Maxdm5RcphtzKSSK2nryzg"),
+]:
+    add(slug=slug, name=nm, version="draft", dept="lifestyle", coll="lifestyle-solutions", tier="A", route="To plan at G0",
+        wave="Unassigned (G0)", price="TBA", fmt="Software (browser app)", short=sh,
+        bullets=["Full details will be published at release"],
+        gates=g("N", "N", "N", "N", "N", "N"), checks=0, checks_note="Working draft; no listing doc",
+        blockers="G0 market review; finish build and move to ValueBridge hosting; listing doc; price; tests; user trial; lawyer review",
+        reviewer="User trial", web="dev", bundles=[], listing="None yet (artifact: " + url + ")")
 
 BUNDLES = [
     ("workplace-safety", "Workplace Safety Bundle", "89", ["risk-assessment-toolkit", "toolbox-talks-pack", "permit-to-work-bundle", "safety-statistics-monitor"], "safety"),
