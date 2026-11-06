@@ -40,7 +40,15 @@ WEB_STATUS = {
     "dev": ("Coming soon", "In development"),
     "enquiry": ("Coming soon", "Enquiries open when the store launches"),
     "new": ("Coming soon", "Newly built · awaiting market review and testing"),
+    "released": ("Available now", "Instant download after checkout"),
 }
+
+# Lemon Squeezy checkout.
+# To release a product: set web="released" and checkout="https://valuebridgeja.lemonsqueezy.com/checkout/buy/<uuid>"
+# on its add(...) line, run tools/build.py, commit and push. Do this only after gate G9 is signed in QA-02.
+# TEST_CHECKOUT_URL: a test-mode product's checkout link, shown only on /test-checkout.html (noindex). Leave "" to hide.
+STORE_URL = "https://valuebridgeja.lemonsqueezy.com"
+TEST_CHECKOUT_URL = ""
 
 # Common gate rows
 def g(g0, g1, g2, g3, g5, g6):
@@ -56,6 +64,7 @@ def add(**k):
     k.setdefault("checks", 0)
     k.setdefault("checks_note", "")
     k.setdefault("also", [])
+    k.setdefault("checkout", "")
     P.append(k)
 
 

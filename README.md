@@ -29,7 +29,17 @@ You can ask Claude to do all three steps, for example: "Mark PDF Studio as relea
 | `new` | Coming soon · Newly built · awaiting market review and testing |
 | `enquiry` | Coming soon · Enquiries open when the store launches |
 
-A product moves to "released" only after it passes gate G9 of the Product Review & Approval Process (qa/QA-01 in the project). When the first product is released, add a `released` status with a Buy button that links to its checkout.
+| `released` | Available now · Instant download after checkout (shows a **Buy now** button) |
+
+## Releasing a product (only after gate G9 is signed in QA-02)
+
+1. In Lemon Squeezy, open the live product and copy its checkout link (`https://valuebridgeja.lemonsqueezy.com/checkout/buy/<uuid>`).
+2. In `data/catalog.py`, on that product's `add(...)` line set `web="released"` and `checkout="<that link>"`.
+3. Run `python3 tools/build.py` (it refuses to build if a released product has no link), commit and push.
+
+The Buy button uses Lemon Squeezy's overlay checkout (`lemon.js`), loaded only on pages that have a button. Without JavaScript the same link opens the hosted checkout page. The site banner and home page switch to "store open" wording automatically once any product is released.
+
+**Test checkout:** set `TEST_CHECKOUT_URL` in `data/catalog.py` to a test-mode product's link and rebuild; the button appears on `/test-checkout.html`, which is unlisted and marked noindex. Clear it again before go-live.
 
 ## Wording rules
 

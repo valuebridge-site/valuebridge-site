@@ -37,24 +37,38 @@ def rel(depth):
 
 def price_text(p):
     pr = p["price"]
+    live = p["web"] == "released"
     if pr == "0":
-        return "Planned price: Free"
+        return "Free" if live else "Planned price: Free"
     if pr == "TBA":
         return "Price to be announced"
-    if "/" in pr:
-        return f"Planned price: US${pr}"
-    return f"Planned price: US${pr}"
+    return f"US${pr}" if live else f"Planned price: US${pr}"
+
+
+LEMON_JS = '<script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>'
+
+
+def buy_button(url, label="Buy now"):
+    """Lemon Squeezy overlay checkout: the button opens checkout in a window over the page.
+    lemon.js is loaded only on pages that have a button, so every other page stays script-free.
+    ?embed=1 keeps the overlay; without JavaScript the link still opens the hosted checkout page."""
+    sep = "&" if "?" in url else "?"
+    return f'<a class="btn lemonsqueezy-button" href="{E(url)}{sep}embed=1&media=0&logo=0">{E(label)}</a>'
+
+
+def any_released():
+    return any(p["web"] == "released" for p in C.P)
 
 
 def badge(p):
     label, stage = C.WEB_STATUS[p["web"]]
-    return f'<span class="badge">{E(label)}</span><span class="stage">{E(stage)}</span>'
+    return f'<span class="badge{" live" if p["web"]=="released" else ""}">{E(label)}</span><span class="stage">{E(stage)}</span>'
 
 
 def card(p, d):
     label, stage = C.WEB_STATUS[p["web"]]
     return f"""<a class="card" href="{rel(d)}products/{p['slug']}.html">
-  <span class="badge">{E(label)}</span>
+  <span class="badge{' live' if p['web']=='released' else ''}">{E(label)}</span>
   <h3>{E(p['name'])}</h3>
   <p>{E(p['short'])}</p>
   <div class="meta"><span>{E(p['coll_name'])}</span><span>{E(price_text(p).replace('Planned price: ', '').replace('Price to be announced','Price TBA'))}</span></div>
@@ -62,9 +76,11 @@ def card(p, d):
 </a>"""
 
 
-def page(path, title, body, desc, d, active=""):
+def page(path, title, body, desc, d, active="", head="", noindex=False):
     nav = [("index.html", "Home"), ("catalogue.html", "All products"), ("departments/business-tools.html", "Departments"),
            ("bundles.html", "Bundles"), ("about.html", "About"), ("contact.html", "Contact")]
+    notice = ("Our store is open: products marked Available now can be bought today. Other products are coming soon." if any_released()
+              else "Our store is not open yet. Every product is coming soon; the first releases are planned for December 2026.")
     navhtml = "".join(f'<a href="{rel(d)}{h}"{" class=on" if active == n else ""}>{n}</a>' for h, n in nav)
     full = f"""<!doctype html>
 <html lang="en">
@@ -77,9 +93,10 @@ def page(path, title, body, desc, d, active=""):
 <link rel="stylesheet" href="{rel(d)}assets/site.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+{'<meta name="robots" content="noindex,nofollow">' if noindex else ''}{head}
 </head>
 <body>
-<div class="notice">Our store is not open yet. Every product is coming soon; the first releases are planned for December 2026.</div>
+<div class="notice">{notice}</div>
 <header class="top"><div class="wrap">
   <a class="logo" href="{rel(d)}index.html"><img src="{rel(d)}assets/logo.png" alt="ValueBridge" width="154" height="39"></a>
   <input type="checkbox" id="m" class="mtoggle"><label for="m" class="mbtn" aria-label="Menu">Menu</label>
@@ -102,7 +119,8 @@ def page(path, title, body, desc, d, active=""):
     os.makedirs(os.path.dirname(fp), exist_ok=True)
     with open(fp, "w", encoding="utf-8") as f:
         f.write(full)
-    PAGES.append(path)
+    if not noindex:
+        PAGES.append(path)
 
 
 def grid(products, d):
@@ -110,7 +128,7 @@ def grid(products, d):
 
 
 def order(ps):
-    rank = {"testing": 0, "enquiry": 1, "review": 2, "dev": 3, "review2027": 4, "new": 5}
+    rank = {"released": -1, "testing": 0, "enquiry": 1, "review": 2, "dev": 3, "review2027": 4, "new": 5}
     return sorted(ps, key=lambda p: (rank[p["web"]], p["name"]))
 
 
@@ -130,7 +148,8 @@ def build():
 </div></section>
 <section class="wrap"><h2>Shop by department</h2><div class="tiles">{depts}</div></section>
 <section class="wrap"><h2>Collections</h2><div class="chips">{colls}<a class="chip" href="bundles.html">Bundles <span>{len(C.BUNDLES)}</span></a></div></section>
-<section class="wrap"><h2>First releases</h2><p class="sub">These products are in final testing and are planned for December 2026.</p>{grid(sorted(first, key=lambda p: p['name']), d)}</section>
+{('<section class="wrap"><h2>Available now</h2>' + grid(sorted([p for p in C.P if p["web"]=="released"], key=lambda p: p["name"]), d) + '</section>') if any_released() else ''}
+<section class="wrap"><h2>{'Coming next' if any_released() else 'First releases'}</h2><p class="sub">These products are in final testing and are planned for December 2026.</p>{grid(sorted(first, key=lambda p: p['name']), d)}</section>
 <section class="wrap how"><h2>How our products are released</h2><ol class="steps">
 <li><b>Built</b><span>Files and examples created and self-checked.</span></li>
 <li><b>Tested</b><span>Opened and used on real computers and phones.</span></li>
@@ -146,7 +165,7 @@ def build():
         label, stage = C.WEB_STATUS[p["web"]]
         rows += f'<tr data-s="{p["web"]}"><td><a href="products/{p["slug"]}.html">{E(p["name"])}</a></td><td>{E(p["dept_name"])}</td><td>{E(p["coll_name"])}</td><td>{E(price_text(p).replace("Planned price: ", ""))}</td><td>{E(stage)}</td></tr>'
     body = f"""<section class="wrap pagehead"><h1>All products</h1><p class="sub">{len(C.P)} products. All are coming soon; planned prices may change before release.</p>
-<div class="filters"><button data-f="all" class="on">All</button><button data-f="testing">Final testing</button><button data-f="review">Specialist review (early 2027)</button><button data-f="review2027">Specialist review (2027)</button><button data-f="dev">In development</button><button data-f="new">Newly built</button></div>
+<div class="filters"><button data-f="all" class="on">All</button>{'<button data-f="released">Available now</button>' if any_released() else ''}<button data-f="testing">Final testing</button><button data-f="review">Specialist review (early 2027)</button><button data-f="review2027">Specialist review (2027)</button><button data-f="dev">In development</button><button data-f="new">Newly built</button></div>
 <div class="tablewrap"><table class="cat"><thead><tr><th>Product</th><th>Department</th><th>Collection</th><th>Planned price</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table></div></section>
 <script>
 document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
@@ -186,25 +205,32 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
         inb = [x for x in C.BUNDLES if p["slug"] in x[3]]
         bund = ""
         if inb:
-            bund = "<p><b>Also planned in:</b> " + ", ".join(f'<a href="../bundles.html#{x[0]}">{E(x[1])}</a>' for x in inb) + "</p>"
+            bund = f"<p><b>{'Also in' if p['web']=='released' else 'Also planned in'}:</b> " + ", ".join(f'<a href="../bundles.html#{x[0]}">{E(x[1])}</a>' for x in inb) + "</p>"
         note = {"A": "", "Service": "",
                 "B": "A planning and tracking tool, not accounting, tax, investment or legal advice.",
                 "C": "Templates and tools support your own work. They are not legal, safety, environmental or engineering advice; adapt them to your situation and have them checked by a competent person."}[p["tier"]]
         related = [q for q in order(C.P) if q["coll"] == p["coll"] and q["slug"] != p["slug"]][:3]
-        cta = ('<a class="btn" href="../quote.html">About tailored setup</a>' if p["tier"] == "Service"
-               else '<span class="btn disabled" aria-disabled="true">Coming soon</span>')
+        if p["tier"] == "Service":
+            cta = '<a class="btn" href="../quote.html">About tailored setup</a>'
+        elif p["web"] == "released" and p["checkout"]:
+            cta = buy_button(p["checkout"]) + '<p class="small">Secure checkout by Lemon Squeezy, our payment partner. Card, PayPal and Apple/Google Pay where available. Prices in US dollars; taxes shown at checkout.</p>'
+        elif p["web"] == "released":
+            raise SystemExit(f"{p['slug']} is marked released but has no checkout link")
+        else:
+            cta = '<span class="btn disabled" aria-disabled="true">Coming soon</span>'
+        head = LEMON_JS if (p["web"] == "released" and p["checkout"]) else ""
         body = f"""<section class="wrap pagehead"><p class="crumb"><a href="../index.html">Home</a> / <a href="../departments/{p['dept']}.html">{E(p['dept_name'])}</a> / <a href="../collections/{p['coll']}.html">{E(p['coll_name'])}</a></p></section>
 <section class="wrap product">
 <div class="pmain">
   <div class="pbadges">{badge(p)}</div>
   <h1>{E(p['name'])}</h1>
   <p class="lead">{E(p['short'])}</p>
-  <h2>What's planned to be included</h2><ul class="ticks">{bullets}</ul>
+  <h2>{"What's included" if p["web"]=="released" else "What's planned to be included"}</h2><ul class="ticks">{bullets}</ul>
   {f'<p class="fine">{E(note)}</p>' if note else ''}
 </div>
 <aside class="pbox">
   <div class="price">{E(price_text(p))}</div>
-  <p class="small">Prices may change before release.</p>
+  {'<p class="small">Prices may change before release.</p>' if p["web"] != "released" else ''}
   {cta}
   <dl><dt>Format</dt><dd>{E(p['fmt'])}</dd><dt>Version</dt><dd>{E(p['version'])}</dd><dt>Status</dt><dd>{E(stage)}</dd></dl>
   {bund}
@@ -212,7 +238,7 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
 </aside>
 </section>
 {('<section class="wrap"><h2 class="h2s">More in ' + E(p['coll_name']) + '</h2>' + grid(related, 1) + '</section>') if related else ''}"""
-        page(f"products/{p['slug']}.html", f"{p['name']} · ValueBridge", body, p["short"], 1)
+        page(f"products/{p['slug']}.html", f"{p['name']} · ValueBridge", body, p["short"], 1, head=head)
 
     # ---------- bundles ----------
     items = ""
@@ -258,6 +284,14 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
     }
     for path, (t, act, b) in info.items():
         page(path, f"{t} · ValueBridge", f'<section class="wrap pagehead"><h1>{E(t)}</h1></section><section class="wrap prose">{b}</section>', t, 0, act)
+    # Private test page for the Lemon Squeezy test-mode product (not linked, not indexed)
+    if C.TEST_CHECKOUT_URL:
+        tbody = f"""<section class="wrap pagehead"><h1>Checkout test</h1><p class="sub">Internal page. Test mode: use card 4242 4242 4242 4242, any future date, any CVC. No real charge is made.</p>
+<p>{buy_button(C.TEST_CHECKOUT_URL, "Open test checkout")}</p>
+<ol class="numbered"><li>Click the button. The checkout should open in a window over this page.</li><li>Pay with the test card.</li><li>Check that the receipt email arrives and the download link works.</li><li>Tell Claude the result.</li></ol></section>"""
+    else:
+        tbody = """<section class="wrap pagehead"><h1>Checkout test</h1><p class="sub">Internal page. No test checkout link has been set yet: add it as TEST_CHECKOUT_URL in data/catalog.py and rebuild.</p></section>"""
+    page("test-checkout.html", "Checkout test · ValueBridge", tbody, "Internal", 0, head=LEMON_JS if C.TEST_CHECKOUT_URL else "", noindex=True)
     page("404.html", "Page not found · ValueBridge", '<section class="wrap pagehead"><h1>Page not found</h1><p><a href="/">Go to the home page</a></p></section>', "Not found", 0)
     PAGES.remove("404.html")
 
