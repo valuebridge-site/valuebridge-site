@@ -28,7 +28,6 @@ You can ask Claude to do all three steps, for example: "Mark PDF Studio as relea
 | `dev` | Coming soon · In development |
 | `new` | Coming soon · Newly built · awaiting market review and testing |
 | `enquiry` | Coming soon · Enquiries open when the store launches |
-
 | `released` | Available now · Instant download after checkout (shows a **Buy now** button) |
 
 ## Releasing a product (only after gate G9 is signed in QA-02)
