@@ -278,32 +278,53 @@ add(slug="traffic-management-plan-kit", name="Traffic Management Plan Kit", vers
     gates=g("Y", "P", "N", "AI", "N", "AI"), blockers=W2_SAFETY + " (traffic management experience)", reviewer="R06a Safety practitioner (traffic)",
     web="review2027", bundles=[], listing="claude/ValueBridge_TMP_Kit_Listing.md")
 
-CRS_BLOCK = "EHS practitioner review (W2-2); Quality & Compliance review findings; 'starter pointers to verify' wording; support email; desktop tests; lawyer review"
-for slug, nm, pr, sh in [
-    ("permits-licences-register", "Permits & Licences Register", "39", "Track permits and licences across sites, with expiry and renewal flags and linked actions."),
-    ("legal-requirements-register", "Legal & Statutory Requirements Register", "39", "Record the legal requirements that apply to you, with starter pointers to verify and review dates."),
-    ("environmental-register", "Environmental Register", "39", "Record environmental aspects, monitoring, waste and emissions estimates for up to 20 sites."),
-    ("incident-capa-register", "Incident, Near Miss & Corrective Action Register", "35", "Log incidents and near misses and track corrective actions through to an effectiveness check."),
-    ("quality-register", "Quality Register", "39", "Nonconformities, complaints, audits and document control in one register."),
+CRS_BLOCK = ("Owner desktop Excel tests of all 14 workbooks (G2); EHS practitioner, ISO 9001:2026 lead auditor and environmental reviewer (G3); "
+             "attorney review of the licence summary, notices, Jamaica pointers and data-protection wording (G6); Drive archive; Lemon Squeezy set-up")
+CRS_NOTE = ("v1.0.0 built 7 Nov 2026: 14 workbooks recalculated with 0 errors (about 262,000 formulas); dashboard figures cross-checked "
+            "by a separate calculation; client-data, placeholder and wording scans clear; release ZIPs in valuebridge-products; "
+            "screenshots and full product page drafted (pending legal)")
+CRS_FMT = "Excel workbooks (Blank + Example), Playbook (Word + PDF)"
+for slug, nm, pr, sh, bl in [
+    ("permits-licences-register", "Permits & Licences Register", "39",
+     "Track permits and licences across up to 20 sites, with expiry and renewal status that calculates, permit conditions and linked actions.",
+     ["Status, P1–P4 priority and alert calculate from expiry dates and lead times", "Permit conditions and recurring duties with rolling due dates",
+      "Starter List: 170 starter pointers to check for 7 countries and 12 industries", "Share View and a 12-month renewal calendar"]),
+    ("legal-requirements-register", "Legal & Statutory Requirements Register", "39",
+     "Record the legal requirements that apply to you, how you meet them and when you last evaluated them, starting from pointers to check.",
+     ["What each requirement asks and how you meet it, by site", "Evaluation cycle with Met / Partly met / Not met and evaluator",
+      "Change in Law log and a change-check flag", "Starter List: 170 starter pointers to check for 7 countries"]),
+    ("environmental-register", "Environmental Register", "39",
+     "Aspects, monitoring against limits, waste and duty of care, energy and emissions estimates, events and changes for up to 20 sites.",
+     ["Aspects with significance rules", "Exceedance and near-limit flags against your permit limits",
+      "Waste tonnes, diversion and carrier-licence checks", "Scope 1 and location-based Scope 2 estimates from your factors"]),
+    ("incident-capa-register", "Incident, Near Miss & Corrective Action Register", "35",
+     "Log incidents and near misses, set investigations by potential severity, track notifications and close actions after an effectiveness check.",
+     ["Investigation level and deadline from potential severity", "Notification flags: not notified, notified late",
+      "TRIR (OSHA-style) and LTIFR (ILO-style) from hours worked", "Changes register and one action list"]),
+    ("quality-register", "Quality Register", "39",
+     "NCRs, complaints, audits, documents, calibration, risks and opportunities, objectives and changes in one Excel register.",
+     ["Repeat-NCR flag, concessions and cost of poor quality", "Audits with remote or hybrid method and auditor independence",
+      "Risks and opportunities, quality objectives and changes", "Quality Policy template included"]),
 ]:
-    add(slug=slug, name=nm, version="1.0", dept="business-tools", coll="quality-compliance", tier="C", route="Wave 2 (W2-2)",
-        wave="Wave 2", price=pr, fmt="Excel workbooks (Blank + Example), playbook",
-        short=sh,
-        bullets=["Up to 20 sites, each with country and industry", "Dashboard, trend view and shared action tracker",
-                 "Part of the Compliance Register Suite; 18-page playbook included"],
-        gates=g("P", "P", "N", "AI", "N", "AI"), blockers=CRS_BLOCK, reviewer="R06c Quality & compliance; EHS practitioner",
-        web="review2027", bundles=[], listing="claude/ValueBridge_Compliance_Register_Suite_Listing.md")
-add(slug="ehs-registers-suite", name="EHS Registers Suite", version="1.0", dept="business-tools", coll="quality-compliance",
-    tier="C", route="Wave 2 (W2-2)", wave="Wave 2", price="99", fmt="Excel workbook (Blank + Example), playbook",
-    short="Permits, legal requirements, environmental and incident registers together in one linked workbook.",
-    bullets=["Four registers sharing one action tracker and dashboard", "Up to 20 sites", "Starter pointers to verify for several Caribbean countries, the US and the UK"],
-    gates=g("P", "P", "N", "AI", "N", "AI"), blockers=CRS_BLOCK + "; rename from 'EHS Compliance Suite'", reviewer="R06c; EHS practitioner",
+    add(slug=slug, name=nm, version="1.0.0", dept="business-tools", coll="quality-compliance", tier="C", route="Wave 2 (W2-2)",
+        wave="Wave 2", price=pr, fmt=CRS_FMT + (", Quality Policy template" if slug == "quality-register" else ""),
+        short=sh, bullets=bl + ["Part of the Compliance Register Suite: Blank and Example workbooks, 21-page Playbook"],
+        gates=g("P", "Y", "N", "AI", "P", "AI"), checks=2, checks_note=CRS_NOTE, blockers=CRS_BLOCK,
+        reviewer="R06c Quality & compliance; EHS practitioner", web="review2027", bundles=[],
+        listing="claude/ValueBridge_Compliance_Register_Suite_Listing.md")
+add(slug="ehs-registers-suite", name="EHS Registers Suite", version="1.0.0", dept="business-tools", coll="quality-compliance",
+    tier="C", route="Wave 2 (W2-2)", wave="Wave 2", price="99", fmt=CRS_FMT,
+    short="Permits, legal requirements, environmental and incident registers in one linked workbook with one dashboard and action list.",
+    bullets=["Four registers sharing one Setup, action list and dashboard", "Up to 20 sites, each with its own country and industry",
+             "Starter pointers to check for 7 countries and 12 industries", "Changes register; Blank and Example workbooks; 21-page Playbook"],
+    gates=g("P", "Y", "N", "AI", "P", "AI"), checks=2, checks_note=CRS_NOTE, blockers=CRS_BLOCK, reviewer="R06c; EHS practitioner",
     web="review2027", bundles=[], listing="claude/ValueBridge_Compliance_Register_Suite_Listing.md")
-add(slug="integrated-compliance-suite", name="Integrated Compliance Register Suite", version="1.0", dept="business-tools", coll="quality-compliance",
-    tier="C", route="Wave 2 (W2-2)", wave="Wave 2", price="129", fmt="Excel workbook (Blank + Example), playbook",
-    short="All five registers (permits, legal, environmental, incidents and quality) in one linked workbook.",
-    bullets=["Five registers with a shared action tracker", "Dashboard and trend view across sites", "18-page playbook"],
-    gates=g("P", "P", "N", "AI", "N", "AI"), blockers=CRS_BLOCK, reviewer="R06c; EHS practitioner",
+add(slug="integrated-compliance-suite", name="Integrated Compliance Register Suite", version="1.0.0", dept="business-tools", coll="quality-compliance",
+    tier="C", route="Wave 2 (W2-2)", wave="Wave 2", price="129", fmt=CRS_FMT + ", Quality Policy template",
+    short="All five registers (permits, legal, environmental, incidents and quality) in one linked workbook, plus changes, risks and objectives.",
+    bullets=["Five registers with one action list and effectiveness checks", "Changes, risks and opportunities and quality objectives",
+             "Dashboard and trend view across up to 20 sites", "Blank and Example workbooks, 21-page Playbook, Quality Policy template"],
+    gates=g("P", "Y", "N", "AI", "P", "AI"), checks=2, checks_note=CRS_NOTE, blockers=CRS_BLOCK, reviewer="R06c; EHS practitioner",
     web="review2027", bundles=[], listing="claude/ValueBridge_Compliance_Register_Suite_Listing.md")
 
 ESG_BLOCK = "ESG auditor review (W2-3); framework landscape re-check; verdict labels (QA-26); support email; desktop tests; lawyer review"
@@ -711,3 +732,6 @@ DETAILS = {
         "trial_live": False,
     },
 }
+
+from compliance_pages import CRS_DETAILS  # noqa: E402  (Compliance Register Suite full pages, v1.0.0)
+DETAILS.update(CRS_DETAILS)

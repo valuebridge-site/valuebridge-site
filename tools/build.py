@@ -123,7 +123,7 @@ def page(path, title, body, desc, d, active="", head="", noindex=False):
         PAGES.append(path)
 
 
-def rich_product(p, D, cta, bund, related):
+def rich_product(p, D, cta, bund, related, note=""):
     """Full product page for products with a DETAILS entry in the catalogue (G5 content)."""
     import json
     slug = p["slug"]
@@ -163,7 +163,7 @@ def rich_product(p, D, cta, bund, related):
   <p class="lead">{E(D['lead'])}</p>
   <p class="mprice"><b>{E(price_text(p))}</b> · {E(C.WEB_STATUS[p['web']][0])}{' · <a href="#try">Try it free</a>' if trial_on else ''}</p>
   {video}
-  <h2>Screenshots</h2><p class="small">Example data shown. All people, tasks and dates are fictional.</p>{gallery}
+  <h2>Screenshots</h2><p class="small">{E(D.get("gallery_note", "Example data shown. All people, tasks and dates are fictional."))}</p>{gallery}
   <h2>Who it's for</h2><ul class="ticks">{who}</ul>
   <h2>How it works</h2><ol class="steps">{steps}</ol>
   <h2>{"What's included" if live else "What's planned to be included"}</h2><div class="features">{feats}</div>
@@ -175,12 +175,13 @@ def rich_product(p, D, cta, bund, related):
   <h2>Licence</h2><p>{E(D['licence'])}</p>
   <p class="fine">{E(D['privacy'])}</p>
   <p class="fine">{E(D['affiliation'])}</p>
+  {f'<p class="fine">{E(note)}</p>' if note else ''}
 </div>
 <aside class="pbox">
   <div class="price">{E(price_text(p))}</div>
   {'<p class="small">Prices may change before release.</p>' if not live else ''}
   {cta}
-  <dl><dt>Format</dt><dd>{E(p['fmt'])}</dd><dt>Version</dt><dd>{E(p['version'])}</dd><dt>Licence</dt><dd>One-time, up to 3 devices</dd><dt>Status</dt><dd>{E(C.WEB_STATUS[p['web']][1])}</dd></dl>
+  <dl><dt>Format</dt><dd>{E(p['fmt'])}</dd><dt>Version</dt><dd>{E(p['version'])}</dd><dt>Licence</dt><dd>{E(D.get('licence_label', 'One-time, up to 3 devices'))}</dd><dt>Status</dt><dd>{E(C.WEB_STATUS[p['web']][1])}</dd></dl>
   {bund}
   {'<p class="small"><a href="#' + 'try">Try the free trial</a></p>' if trial_on else ''}
   <p class="small">Questions? <a href="mailto:hello@valuebridgeja.com?subject={E(p['name'])}">hello@valuebridgeja.com</a></p>
@@ -189,10 +190,14 @@ def rich_product(p, D, cta, bund, related):
 {('<section class="wrap"><h2 class="h2s">More in ' + E(p['coll_name']) + '</h2>' + grid(related, 1) + '</section>') if related else ''}"""
     url = f"{DOMAIN}/products/{slug}.html"
     img = f"{DOMAIN}/assets/products/{slug}/{D['social_image']}"
-    app = {"@type": "SoftwareApplication", "name": p["name"], "applicationCategory": "BusinessApplication",
-           "operatingSystem": "Web browser", "softwareVersion": p["version"], "description": D["description"], "url": url,
-           "image": [img] + [f"{DOMAIN}/assets/products/{slug}/{f}" for f, _, _ in D.get("gallery", [])[:3]],
-           "publisher": {"@type": "Organization", "name": "ValueBridge", "url": DOMAIN}}
+    imgs = [img] + [f"{DOMAIN}/assets/products/{slug}/{f}" for f, _, _ in D.get("gallery", [])[:3]]
+    if D.get("schema") == "Product":
+        app = {"@type": "Product", "name": p["name"], "description": D["description"], "url": url, "image": imgs,
+               "sku": f"{slug}-{p['version']}", "brand": {"@type": "Brand", "name": "ValueBridge"}}
+    else:
+        app = {"@type": "SoftwareApplication", "name": p["name"], "applicationCategory": "BusinessApplication",
+               "operatingSystem": "Web browser", "softwareVersion": p["version"], "description": D["description"], "url": url,
+               "image": imgs, "publisher": {"@type": "Organization", "name": "ValueBridge", "url": DOMAIN}}
     if live and p["checkout"]:
         app["offers"] = {"@type": "Offer", "price": p["price"], "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": url}
     graph = [{"@type": "BreadcrumbList", "itemListElement": [
@@ -324,7 +329,7 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
         head = LEMON_JS if (p["web"] == "released" and p["checkout"]) else ""
         D = getattr(C, "DETAILS", {}).get(p["slug"])
         if D:
-            body, rhead, _ = rich_product(p, D, cta, bund, related)
+            body, rhead, _ = rich_product(p, D, cta, bund, related, note)
             page(f"products/{p['slug']}.html", D["title"], body, D["description"], 1, head=head + rhead)
             continue
         body = f"""<section class="wrap pagehead"><p class="crumb"><a href="../index.html">Home</a> / <a href="../departments/{p['dept']}.html">{E(p['dept_name'])}</a> / <a href="../collections/{p['coll']}.html">{E(p['coll_name'])}</a></p></section>
