@@ -40,6 +40,14 @@ The Buy button uses Lemon Squeezy's overlay checkout (`lemon.js`), loaded only o
 
 **Test checkout:** set `TEST_CHECKOUT_URL` in `data/catalog.py` to a test-mode product's link and rebuild; the button appears on `/test-checkout.html`, which is unlisted and marked noindex. Clear it again before go-live.
 
+## Full product pages
+
+A product with an entry in `DETAILS` (end of `data/catalog.py`) gets a full page: video with captions and transcript, screenshots, who it's for, how it works, features, requirements, limits, FAQ, licence, Open Graph tags and structured data (BreadcrumbList, SoftwareApplication, VideoObject; an Offer is added only once the product is released). Images and videos live in `site/assets/products/<slug>/`. Tempo is the first product with one.
+
+## Free trial builds (QA-04 Stage 1)
+
+Trial builds wait in `staging/try/<slug>/index.html`, which Cloudflare does not serve. To publish one, set `"trial_live": True` in that product's `DETAILS` entry and rebuild: `tools/build.py` copies it to `site/try/<slug>/` and adds a "Try it free" button and a trial-vs-full table to the product page. Set it back to `False` and rebuild to take it down. Do this only after the owner approves the trial and it has passed G2 and G6.
+
 ## Wording rules
 
 All product text follows the master wording rules in the Legal Review:

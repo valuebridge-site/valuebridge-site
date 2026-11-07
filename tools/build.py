@@ -123,6 +123,109 @@ def page(path, title, body, desc, d, active="", head="", noindex=False):
         PAGES.append(path)
 
 
+def rich_product(p, D, cta, bund, related):
+    """Full product page for products with a DETAILS entry in the catalogue (G5 content)."""
+    import json
+    slug = p["slug"]
+    A = f"../assets/products/{slug}/"
+    live = p["web"] == "released"
+    trial_on = D.get("trial_live") and os.path.exists(os.path.join(ROOT, "staging", "try", slug, "index.html"))
+    v = D.get("video")
+    video = ""
+    if v:
+        lng = v.get("long")
+        video = f"""<figure class="pvideo"><video controls preload="none" playsinline poster="{A}{v['poster']}" width="1920" height="1080">
+<source src="{A}{v['file']}" type="video/mp4"><track kind="captions" src="{A}{v['captions']}" srclang="en" label="English" default></video>
+<figcaption>{E(v['title'])}{f' · <a href="{A}{lng["file"]}">{E(lng["label"])}</a>' if lng else ''}</figcaption>
+<details class="transcript"><summary>Read the video transcript</summary><p>{E(v['transcript'])}</p></details></figure>"""
+    gallery = '<div class="gallery">' + "".join(
+        f'<figure><a href="{A}{f}"><img src="{A}{f}" alt="{E(alt)}" width="1440" height="900" loading="lazy" decoding="async"></a><figcaption>{E(cap)}</figcaption></figure>'
+        for f, alt, cap in D.get("gallery", [])) + "</div>"
+    who = "".join(f"<li>{E(x)}</li>" for x in D.get("who", []))
+    steps = "".join(f"<li><b>{E(a)}</b><span>{E(b)}</span></li>" for a, b in D.get("steps", []))
+    feats = "".join(f"<div><h3>{E(a)}</h3><p>{E(b)}</p></div>" for a, b in D.get("features", []))
+    files = "".join(f"<li><b>{E(a)}</b>: {E(b)}</li>" for a, b in D.get("files", []))
+    limits = "".join(f"<li>{E(x)}</li>" for x in D.get("limits", []))
+    faq = "".join(f"<details><summary>{E(q)}</summary><p>{E(a)}</p></details>" for q, a in D.get("faq", []))
+    trial = ""
+    if trial_on and D.get("trial"):
+        rows = "".join(f"<tr><td>{E(a)}</td><td>{E(b)}</td><td>{E(c)}</td></tr>" for a, b, c in D["trial"]["rows"])
+        trial = f"""<h2 id="try">Try it free</h2><p>Open the free trial version in your browser: no signup, sample data included.</p>
+<p><a class="btn" href="../try/{slug}/">Open the free trial</a></p>
+<div class="tablewrap"><table class="cat cmp"><thead><tr><th></th><th>Free trial</th><th>Full version</th></tr></thead><tbody>{rows}</tbody></table></div>"""
+    if trial_on:
+        cta = cta + f'<a class="btn ghost" href="../try/{slug}/">Try it free</a>'
+    body = f"""<section class="wrap pagehead"><p class="crumb"><a href="../index.html">Home</a> / <a href="../departments/{p['dept']}.html">{E(p['dept_name'])}</a> / <a href="../collections/{p['coll']}.html">{E(p['coll_name'])}</a></p></section>
+<section class="wrap product">
+<div class="pmain">
+  <div class="pbadges">{badge(p)}</div>
+  <h1>{E(p['name'])}</h1>
+  <p class="lead">{E(D['lead'])}</p>
+  <p class="mprice"><b>{E(price_text(p))}</b> · {E(C.WEB_STATUS[p['web']][0])}{' · <a href="#try">Try it free</a>' if trial_on else ''}</p>
+  {video}
+  <h2>Screenshots</h2><p class="small">Example data shown. All people, tasks and dates are fictional.</p>{gallery}
+  <h2>Who it's for</h2><ul class="ticks">{who}</ul>
+  <h2>How it works</h2><ol class="steps">{steps}</ol>
+  <h2>{"What's included" if live else "What's planned to be included"}</h2><div class="features">{feats}</div>
+  <h3 class="h3s">In the download</h3><ul>{files}</ul>
+  <h2>Requirements</h2><p>{E(D['requirements'])}</p>
+  <h2>Limits</h2><ul class="limits">{limits}</ul>
+  {trial}
+  <h2>Questions</h2><div class="faq">{faq}</div>
+  <h2>Licence</h2><p>{E(D['licence'])}</p>
+  <p class="fine">{E(D['privacy'])}</p>
+  <p class="fine">{E(D['affiliation'])}</p>
+</div>
+<aside class="pbox">
+  <div class="price">{E(price_text(p))}</div>
+  {'<p class="small">Prices may change before release.</p>' if not live else ''}
+  {cta}
+  <dl><dt>Format</dt><dd>{E(p['fmt'])}</dd><dt>Version</dt><dd>{E(p['version'])}</dd><dt>Licence</dt><dd>One-time, up to 3 devices</dd><dt>Status</dt><dd>{E(C.WEB_STATUS[p['web']][1])}</dd></dl>
+  {bund}
+  {'<p class="small"><a href="#' + 'try">Try the free trial</a></p>' if trial_on else ''}
+  <p class="small">Questions? <a href="mailto:hello@valuebridgeja.com?subject={E(p['name'])}">hello@valuebridgeja.com</a></p>
+</aside>
+</section>
+{('<section class="wrap"><h2 class="h2s">More in ' + E(p['coll_name']) + '</h2>' + grid(related, 1) + '</section>') if related else ''}"""
+    url = f"{DOMAIN}/products/{slug}.html"
+    img = f"{DOMAIN}/assets/products/{slug}/{D['social_image']}"
+    app = {"@type": "SoftwareApplication", "name": p["name"], "applicationCategory": "BusinessApplication",
+           "operatingSystem": "Web browser", "softwareVersion": p["version"], "description": D["description"], "url": url,
+           "image": [img] + [f"{DOMAIN}/assets/products/{slug}/{f}" for f, _, _ in D.get("gallery", [])[:3]],
+           "publisher": {"@type": "Organization", "name": "ValueBridge", "url": DOMAIN}}
+    if live and p["checkout"]:
+        app["offers"] = {"@type": "Offer", "price": p["price"], "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": url}
+    graph = [{"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": DOMAIN + "/"},
+        {"@type": "ListItem", "position": 2, "name": p["dept_name"], "item": f"{DOMAIN}/departments/{p['dept']}.html"},
+        {"@type": "ListItem", "position": 3, "name": p["coll_name"], "item": f"{DOMAIN}/collections/{p['coll']}.html"},
+        {"@type": "ListItem", "position": 4, "name": p["name"], "item": url}]}, app]
+    if v:
+        graph.append({"@type": "VideoObject", "name": v["title"], "description": D["description"],
+                      "thumbnailUrl": f"{DOMAIN}/assets/products/{slug}/{v['poster']}", "uploadDate": v["uploaded"],
+                      "duration": v["duration"], "contentUrl": f"{DOMAIN}/assets/products/{slug}/{v['file']}"})
+    ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False).replace("</", "<\\/")
+    head = (f'\n<link rel="canonical" href="{url}">\n<meta property="og:type" content="product">\n<meta property="og:site_name" content="ValueBridge">\n'
+            f'<meta property="og:title" content="{E(p["name"])}">\n<meta property="og:description" content="{E(D["description"])}">\n'
+            f'<meta property="og:url" content="{url}">\n<meta property="og:image" content="{img}">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n'
+            f'<meta property="og:image:alt" content="{E(p["name"])}: {E(p["short"])}">\n<meta name="twitter:card" content="summary_large_image">\n'
+            f'<script type="application/ld+json">{ld}</script>')
+    return body, head, trial_on
+
+
+def sync_trials():
+    """Publish trial builds only for products whose DETAILS entry has trial_live=True; remove the rest."""
+    import shutil
+    for slug, D in getattr(C, "DETAILS", {}).items():
+        src = os.path.join(ROOT, "staging", "try", slug, "index.html")
+        dst_dir = os.path.join(OUT, "try", slug)
+        if D.get("trial_live") and os.path.exists(src):
+            os.makedirs(dst_dir, exist_ok=True)
+            shutil.copyfile(src, os.path.join(dst_dir, "index.html"))
+        elif os.path.isdir(dst_dir):
+            shutil.rmtree(dst_dir)
+
+
 def grid(products, d):
     return '<div class="grid">' + "".join(card(p, d) for p in products) + "</div>"
 
@@ -219,6 +322,11 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
         else:
             cta = '<span class="btn disabled" aria-disabled="true">Coming soon</span>'
         head = LEMON_JS if (p["web"] == "released" and p["checkout"]) else ""
+        D = getattr(C, "DETAILS", {}).get(p["slug"])
+        if D:
+            body, rhead, _ = rich_product(p, D, cta, bund, related)
+            page(f"products/{p['slug']}.html", D["title"], body, D["description"], 1, head=head + rhead)
+            continue
         body = f"""<section class="wrap pagehead"><p class="crumb"><a href="../index.html">Home</a> / <a href="../departments/{p['dept']}.html">{E(p['dept_name'])}</a> / <a href="../collections/{p['coll']}.html">{E(p['coll_name'])}</a></p></section>
 <section class="wrap product">
 <div class="pmain">
@@ -295,6 +403,7 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
     page("404.html", "Page not found · ValueBridge", '<section class="wrap pagehead"><h1>Page not found</h1><p><a href="/">Go to the home page</a></p></section>', "Not found", 0)
     PAGES.remove("404.html")
 
+    sync_trials()
     with open(os.path.join(OUT, "sitemap.xml"), "w") as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
         for pth in PAGES:

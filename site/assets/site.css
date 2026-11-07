@@ -98,3 +98,26 @@ footer{background:var(--soft);border-top:1px solid var(--line);margin-top:56px;p
  .hero{padding:44px 0 40px}
  .fgrid{grid-template-columns:1fr}
 }
+/* Full product pages (rich_product in tools/build.py) */
+.pmain{min-width:0}
+.pvideo{margin:22px 0 8px}
+.pvideo video{width:100%;height:auto;aspect-ratio:16/9;border-radius:14px;background:#0B2D5B;display:block;border:1px solid var(--line)}
+.pvideo figcaption{font-size:14px;color:var(--mute);margin-top:8px}
+.transcript{margin-top:8px;font-size:14px;color:var(--mute)}.transcript summary{cursor:pointer;color:var(--blue)}.transcript p{margin:8px 0 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:14px;margin-top:10px}
+.gallery figure{margin:0;min-width:0}.gallery img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top left;border-radius:10px;border:1px solid var(--line);background:var(--soft)}
+.gallery a:hover img{border-color:var(--blue)}.gallery figcaption{font-size:13.5px;color:var(--mute);margin-top:6px;line-height:1.4}
+.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:10px}
+.features div{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff}
+.features h3{margin:0 0 4px;font-size:16px;color:var(--navy)}.features p{margin:0;font-size:14.5px;color:#334}
+.h3s{color:var(--navy);margin:22px 0 4px;font-size:17px}
+.limits li{margin-bottom:6px}
+.faq details{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:8px;background:#fff}
+.faq summary{cursor:pointer;font-weight:600;color:var(--navy)}.faq details p{margin:8px 0 0;color:#334}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--line)}.btn.ghost:hover{background:var(--soft)}
+table.cmp{min-width:0}
+.pmain .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:560px){.pmain .steps{grid-template-columns:1fr}}
+.mprice{display:none;font-size:15px;color:var(--navy)}
+@media(max-width:900px){.mprice{display:block}}
+@media(max-width:560px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery figcaption{font-size:12.5px}}
