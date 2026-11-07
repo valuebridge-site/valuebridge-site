@@ -479,6 +479,28 @@ for slug, nm, sh, url in [
         blockers="G0 market review; finish build and move to ValueBridge hosting; listing doc; price; tests; user trial; lawyer review",
         reviewer="User trial", web="dev", bundles=[], listing="None yet (artifact: " + url + ")")
 
+# ---------------- Social packs (design drafts; placement chosen by the owner 7 Nov 2026) ----------------
+for slug, nm, dept, coll, sh, url in [
+    ("small-business-social-pack", "Small Business Social Pack", "business-tools", "business-planning",
+     "Ready-made social media post designs for small businesses: promotions, announcements, opening hours and customer thank-yous.",
+     "https://claude.ai/artifact/1es2NU2wqYCzPdFC3m8ent"),
+    ("coaches-creators-social-pack", "Coaches & Creators Social Pack", "design-assets", "marketing",
+     "Social media post designs for coaches and content creators: tips, quotes, offers and session announcements.",
+     "https://claude.ai/artifact/DZ46rh7U65xSztGGJjkwWx"),
+    ("beauty-wellness-social-pack", "Beauty & Wellness Social Pack", "lifestyle", "lifestyle-solutions",
+     "Social media post designs for salons, spas, barbers and wellness services: services, price lists, bookings and offers.",
+     "https://claude.ai/artifact/QhsUbVXz4JrVZfGz7QHte4"),
+    ("real-estate-social-pack", "Real Estate Social Pack", "lifestyle", "lifestyle-solutions",
+     "Social media post designs for property listings: new listings, open houses, sold notices and market tips.",
+     "https://claude.ai/artifact/EnnyrVwW7JNG1irVP7eKPD"),
+]:
+    add(slug=slug, name=nm, version="draft", dept=dept, coll=coll, tier="A", route="To plan at G0",
+        wave="Unassigned (G0)", price="TBA", fmt="Social media templates (format to confirm: Canva template links or PNG/PDF)",
+        short=sh, bullets=["Full details will be published at release"],
+        gates=g("N", "P", "N", "N", "N", "N"), checks=0, checks_note="Design draft; no listing doc",
+        blockers="G0 market review and price; export as Canva template links or PNG/PDF; remove stock photos and third-party names; Canva licence check; listing doc; lawyer review",
+        reviewer="User trial", web="dev", bundles=[], listing="None yet (artifact: " + url + ")")
+
 # ---------------- Software built 3–7 Nov 2026 (listing docs in the project) ----------------
 add(slug="dueline", name="ValueBridge Dueline", version="1.0.0", dept="lifestyle", coll="lifestyle-solutions", also=["productivity-ai"],
     tier="A", route="Gate A", wave="Launch", price="19", fmt="Software (single HTML file, offline)",
