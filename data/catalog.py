@@ -21,7 +21,7 @@ COLLECTIONS = [
     ("finance", "Finance & Accounting", "Budgets, cash flow, bookkeeping and personal money tools."),
     ("productivity-ai", "Productivity & AI", "Desktop-style apps and AI workflows for everyday work."),
     ("careers", "Careers", "Resumes, cover letters and job applications."),
-    ("marketing", "Marketing & Branding", "Brand kits, content planners and social media templates."),
+    ("marketing", "Social Media & Marketing", "Brand kits, content planners and social media templates."),
     ("safety", "Safety & Health", "Risk assessments, permits, toolbox talks, safety reports and policies."),
     ("quality-compliance", "Quality & Compliance", "Registers for permits, legal requirements, incidents and quality."),
     ("environment", "Environment", "Environmental audits, reports, policies and field forms."),
@@ -31,6 +31,8 @@ COLLECTIONS = [
     ("security-operations", "Security & Operations", "Security audits, plans and reports, and operations management resources."),
     ("research", "Research & Analysis", "Software for qualitative and statistical research analysis."),
     ("lifestyle-solutions", "Lifestyle Solutions", "Tools for your home, household money and everyday life."),
+    ("study-exams", "Study & Exams", "Revision planners, flashcards and practice exams."),
+    ("technology", "Technology & Software", "ValueBridge apps that open in your web browser on phone and computer, designed to work offline on your own device."),
 ]
 
 WEB_STATUS = {
@@ -477,6 +479,74 @@ for slug, nm, sh, url in [
         blockers="G0 market review; finish build and move to ValueBridge hosting; listing doc; price; tests; user trial; lawyer review",
         reviewer="User trial", web="dev", bundles=[], listing="None yet (artifact: " + url + ")")
 
+# ---------------- Software built 3–7 Nov 2026 (listing docs in the project) ----------------
+add(slug="dueline", name="ValueBridge Dueline", version="1.0.0", dept="lifestyle", coll="lifestyle-solutions", also=["productivity-ai"],
+    tier="A", route="Gate A", wave="Launch", price="19", fmt="Software (single HTML file, offline)",
+    short="Renewals, expiry dates, deadlines and birthdays in one private place, in the right order, with the yearly cost worked out.",
+    bullets=["Builds your list from your household, vehicles and home; you fill in the dates on one screen",
+             "Moves tax deadlines off weekends and public holidays",
+             "Warns when a renewal needs another document to be valid first",
+             "Logs each renewal and rolls on to the next date",
+             "Shows the next 12 months' costs and a monthly amount to put aside",
+             "Alerts while Dueline is open, or through your phone's calendar app via .ics export"],
+    gates=g("AI", "Y", "AI", "N", "AI", "AI"), checks=1, checks_note="Build checks passed; real-device tests pending",
+    blockers="Owner real-device tests (Safari, Firefox, Edge, Android, iPhone, .ics imports); user trial; lawyer review",
+    reviewer="User trial (3-5 users)", web="testing", bundles=[], listing="claude/ValueBridge_Dueline_Listing.md")
+add(slug="highlighter", name="ValueBridge Highlighter", version="1.0.0", dept="learning-development", coll="study-exams",
+    tier="A", route="Gate A", wave="Launch", price="19", fmt="Software (single HTML file, offline)",
+    short="Revise in the gaps in your day: flashcards, quizzes, games and timed mock exams, paced to your exam dates.",
+    bullets=["Add a subject and its exam date; paste your notes and Highlighter finds flashcards in them",
+             "Or prepare a prompt for the AI chat assistant you already use",
+             "Quizzes, games and timed mock exams",
+             "Study pace planned around your exam dates",
+             "Works offline with no account; your data stays on your device"],
+    gates=g("AI", "Y", "AI", "N", "AI", "AI"), checks=1, checks_note="Build checks passed; real-device tests pending",
+    blockers="Owner real-device tests (Safari, iPhone/iPad, Android, read-aloud voices); user trial with students; lawyer review; name conflict check (G0)",
+    reviewer="User trial (students)", web="testing", bundles=[], listing="claude/ValueBridge_Highlighter_Listing.md")
+add(slug="keepline", name="ValueBridge Keepline", version="1.0.0", dept="lifestyle", coll="lifestyle-solutions", also=["finance"],
+    tier="B", route="Specialist review", wave="Launch", price="24", fmt="Software (single HTML file, offline)",
+    short="Your pensions, insurance cover and savings in one private place, tracked against your own targets.",
+    bullets=["Log a balance whenever a statement arrives; charts show how each account has moved",
+             "Checks whether planned contributions keep pace with your targets",
+             "Insurance cover with premiums and renewal dates",
+             "One-page summary to take to a licensed adviser",
+             "Optional passcode encrypts your figures on your device",
+             "A tracking and planning aid, not financial, pension or insurance advice"],
+    gates=g("AI", "Y", "AI", "N", "AI", "AI"), checks=1, checks_note="Build checks passed; real-device tests pending",
+    blockers="Financial adviser or accountant review (R06d); owner real-device tests; lawyer review",
+    reviewer="R06d Finance", web="review", bundles=[], listing="claude/ValueBridge_Keepline_Listing.md")
+add(slug="estate-plan-organizer", name="ValueBridge Estate Plan Organizer", version="1.0.0", dept="lifestyle", coll="lifestyle-solutions",
+    tier="C", route="Specialist review", wave="Launch", price="24", fmt="Software (single HTML file, offline)",
+    short="Everything your executor and family need to know, in one private place, with a letter of instruction ready to hand over.",
+    bullets=["What you own and owe, and which assets pass by your will or directly to a joint owner or nominee",
+             "Beneficiaries, executor, guardians and where every original document is kept",
+             "Your wishes for your funeral, pets and digital accounts",
+             "Readiness checklist and a guide of points to check with your attorney",
+             "An organizer and planning aid; not a will and not legal advice"],
+    gates=g("AI", "Y", "AI", "N", "AI", "AI"), checks=1, checks_note="Build checks passed; real-device tests pending",
+    blockers="Wills & estates attorney review (R06g, can combine with G6); owner real-device tests",
+    reviewer="R06g Wills & estates attorney", web="review", bundles=[], listing="claude/ValueBridge_Estate_Plan_Organizer_Listing.md")
+add(slug="ledgerline-bursar", name="Ledgerline Bursar", version="1.0", dept="business-tools", coll="finance",
+    tier="B", route="To plan at G0", wave="Unassigned (G0)", price="79", fmt="Software (single HTML file, offline)",
+    short="A finance desk for a school bursary: fees, receipts, payroll, payables, budget, bank and an audit pack in one app.",
+    bullets=["Profiles for high school, primary, private/prep and college",
+             "Fee payments with numbered receipts, invoices, statements and arrears",
+             "Payroll with Jamaican statutory deductions (rates editable; confirm with the authorities)",
+             "Supplier invoices, budget tracking, deposit slips and bank reconciliation",
+             "Approval roles and an audit trail"],
+    gates=g("N", "P", "N", "N", "N", "N"), checks=0, checks_note="Support email placeholder in README and LICENCE",
+    blockers="G0 market and overlap review (Books, Virtual Accountant); accountant review of payroll; lawyer review; support email; screenshots",
+    reviewer="R06d Accountant", web="new", bundles=[], listing="claude/ValueBridge_Ledgerline_Bursar_Listing.md")
+add(slug="virtual-accountant", name="ValueBridge Virtual Accountant", version="1.0", dept="business-tools", coll="finance",
+    tier="B", route="To plan at G0", wave="Unassigned (G0)", price="TBA", fmt="Software (browser app)",
+    short="Bookkeeping help for small businesses: post entries, reconcile, close the month and read your statements.",
+    bullets=["Trial balance, balance sheet and cash flow statements",
+             "Month-end close checklist and tax calendar",
+             "Planned to be included in Books Pro and sold separately"],
+    gates=g("N", "P", "N", "N", "N", "N"), checks=0, checks_note="No listing doc yet (notes only)",
+    blockers="G0 market and overlap review against Books and the Financial Dashboard Kit; accountant review; lawyer review",
+    reviewer="R06d Accountant", web="new", bundles=[], listing="claude/ValueBridge_Virtual_Accountant_notes.md")
+
 BUNDLES = [
     ("workplace-safety", "Workplace Safety Bundle", "89", ["risk-assessment-toolkit", "toolbox-talks-pack", "permit-to-work-bundle", "safety-statistics-monitor"], "safety"),
     ("productivity-pair", "Productivity Pair", "59", ["pdf-studio", "tempo"], "productivity-ai"),
@@ -490,6 +560,9 @@ BUNDLES = [
     ("env-starter", "Environmental Starter Bundle", "79", ["environmental-report-writing-kit", "environmental-policy-kit"], "environment"),
     ("env-complete", "Environmental Full Suite", "149", ["environmental-audit-kit", "environmental-resource-kit", "environmental-report-writing-kit", "environmental-policy-kit"], "environment"),
     ("carbon-starter", "Carbon Accounting Starter Bundle", "79", ["carbon-footprint-calculator-kit", "carbon-playbook-policy-pack"], "esg-climate"),
+    ("productivity-trio", "Productivity Trio", "69", ["pdf-studio", "tempo", "dueline"], "productivity-ai"),
+    ("household-admin", "Household Admin Bundle", "39", ["dueline", "personal-budget-system"], "lifestyle-solutions"),
+    ("household-money", "Household Money Pair", "45", ["keepline", "personal-budget-system"], "lifestyle-solutions"),
     ("carbon-complete", "Carbon Management Full Suite", "159", ["carbon-footprint-calculator-kit", "carbon-credit-tracker", "carbon-inventory-review-kit", "carbon-playbook-policy-pack"], "esg-climate"),
 ]
 # Tracker-only bundles: contents not in project docs (QA-04) -> not on website
@@ -527,6 +600,8 @@ def stage(p):
 
 
 for p in P:
+    if p["fmt"].startswith("Software") and "technology" not in p["also"] and p["coll"] != "technology":
+        p["also"].append("technology")
     p["stage"] = stage(p)
     p["dept_name"] = dict((a, b) for a, b, _ in DEPARTMENTS)[p["dept"]]
     p["coll_name"] = dict((a, b) for a, b, _ in COLLECTIONS)[p["coll"]]

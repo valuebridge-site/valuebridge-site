@@ -77,7 +77,7 @@ def card(p, d):
 
 
 def page(path, title, body, desc, d, active="", head="", noindex=False):
-    nav = [("index.html", "Home"), ("catalogue.html", "All products"), ("departments/business-tools.html", "Departments"),
+    nav = [("index.html", "Home"), ("catalogue.html", "All products"), ("departments/business-tools.html", "Departments"), ("collections/technology.html", "Technology"), ("collections/marketing.html", "Social"),
            ("bundles.html", "Bundles"), ("about.html", "About"), ("contact.html", "Contact")]
     notice = ("Our store is open: products marked Available now can be bought today. Other products are coming soon." if any_released()
               else "Our store is not open yet. Every product is coming soon; the first releases are planned for December 2026.")
@@ -196,7 +196,7 @@ var f=b.dataset.f;document.querySelectorAll('tr[data-s]').forEach(r=>{{r.style.d
                 f'<li><a href="../bundles.html#{x[0]}">{E(x[1])}</a> · planned US${x[2]}</li>' for x in bl) + "</ul>"
         body = f"""<section class="wrap pagehead"><p class="crumb"><a href="../index.html">Home</a> / Collections</p><h1>{E(b)}</h1><p class="sub">{E(c)}</p></section>
 <section class="wrap">{grid(ps, 1)}{bh}</section>"""
-        page(f"collections/{a}.html", f"{b} · ValueBridge", body, c, 1)
+        page(f"collections/{a}.html", f"{b} · ValueBridge", body, c, 1, {"technology": "Technology", "marketing": "Social"}.get(a, ""))
 
     # ---------- products ----------
     for p in C.P:
