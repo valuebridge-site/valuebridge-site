@@ -83,18 +83,18 @@ add(slug="pdf-studio", name="ValueBridge PDF Studio", version="1.0", dept="produ
     blockers="Support email in files; browser and device tests; network trace before any privacy claim; lawyer review of the device-count licence; decide trial build for the demo",
     reviewer="User trial (3-5 users)", web="testing", bundles=["productivity-pair"], listing="claude/ValueBridge_PDF_Studio_Listing.md")
 
-add(slug="tempo", name="ValueBridge Tempo", version="1.0.1", dept="productivity", coll="productivity-ai",
+add(slug="thrustline", name="ValueBridge Thrustline", version="1.0.2", dept="productivity", coll="productivity-ai",
     tier="A", route="Gate A", wave="Launch", price="29", other="Team US$119 · Site US$249", fmt="Software (single HTML file, works offline)",
     short="Plan your day, protect your focus: tasks, scheduling, a focus timer, habits and reviews in one app for phone and desktop.",
     bullets=["Today view with a capacity meter, timeline and your three priorities",
              "Tasks with quick add, projects, priorities, checklists and repeats",
              "Week and day scheduler with drag and drop and a 7-day auto-plan",
              "Work/break focus timer, habits, insights, and daily and weekly reviews",
-             "Alerts while Tempo is open, or through your calendar app via .ics export"],
+             "Alerts while Thrustline is open, or through your calendar app via .ics export"],
     gates=g("Y", "P", "P", "N", "P", "AI"), checks=2,
     checks_note="v1.0.1 built 7 Nov: support email and notices in the app, fonts built in (network trace: no outside requests), 25/25 automated checks in headless Chromium; 9 screenshots, 73 s overview and 2 min 38 s walkthrough videos with captions; full product page (pending legal)",
-    blockers="Drive archive of v1.0.1; owner tests on Chrome, Edge, Safari, Android and iPhone (alerts, touch drag, add to home screen); user trial (G3); attorney review of licence and page claims (G6); trademark clearance of the name Tempo (live TEMPO Class 9 registration held by Tempo Software); approve QA-04 trial build",
-    reviewer="User trial (3-5 users)", web="testing", bundles=["productivity-pair"], listing="claude/ValueBridge_Tempo_Listing.md")
+    blockers="Drive archive of v1.0.2; owner tests on Chrome, Edge, Safari, Android and iPhone (alerts, touch drag, add to home screen); user trial (G3); attorney review of licence and page claims (G6); attorney to confirm the name Thrustline (renamed 14 Nov 2026 after a name conflict; web screening only, no formal search); approve QA-04 trial build",
+    reviewer="User trial (3-5 users)", web="testing", bundles=["productivity-pair"], listing="claude/ValueBridge_Thrustline_Listing.md")
 
 add(slug="resume-studio", name="ValueBridge Resume Studio", version="2.0", dept="learning-development", coll="careers",
     tier="A", route="Gate A", wave="Launch", price="29", other="Coach US$129 · Campus US$399 (full launch)", fmt="Software (single HTML file, offline)",
@@ -572,7 +572,7 @@ add(slug="virtual-accountant", name="ValueBridge Virtual Accountant", version="1
 
 BUNDLES = [
     ("workplace-safety", "Workplace Safety Bundle", "89", ["risk-assessment-toolkit", "toolbox-talks-pack", "permit-to-work-bundle", "safety-statistics-monitor"], "safety"),
-    ("productivity-pair", "Productivity Pair", "59", ["pdf-studio", "tempo"], "productivity-ai"),
+    ("productivity-pair", "Productivity Pair", "59", ["pdf-studio", "thrustline"], "productivity-ai"),
     ("business-starter", "Business Starter Pack", "79", ["kpi-dashboard-pro", "financial-dashboard-kit", "project-dashboard-kit"], "business-planning"),
     ("safety-documentation", "Safety Documentation Bundle", "75", ["safety-report-writing-kit", "safety-policy-kit"], "safety"),
     ("solar-pv-audit", "Solar PV Audit Bundle", "75", ["solar-pv-audit-kit", "solar-pv-audit-resource-pack"], "energy"),
@@ -583,7 +583,7 @@ BUNDLES = [
     ("env-starter", "Environmental Starter Bundle", "79", ["environmental-report-writing-kit", "environmental-policy-kit"], "environment"),
     ("env-complete", "Environmental Full Suite", "149", ["environmental-audit-kit", "environmental-resource-kit", "environmental-report-writing-kit", "environmental-policy-kit"], "environment"),
     ("carbon-starter", "Carbon Accounting Starter Bundle", "79", ["carbon-footprint-calculator-kit", "carbon-playbook-policy-pack"], "esg-climate"),
-    ("productivity-trio", "Productivity Trio", "69", ["pdf-studio", "tempo", "dueline"], "productivity-ai"),
+    ("productivity-trio", "Productivity Trio", "69", ["pdf-studio", "thrustline", "dueline"], "productivity-ai"),
     ("household-admin", "Household Admin Bundle", "39", ["dueline", "personal-budget-system"], "lifestyle-solutions"),
     ("household-money", "Household Money Pair", "45", ["keepline", "personal-budget-system"], "lifestyle-solutions"),
     ("carbon-complete", "Carbon Management Full Suite", "159", ["carbon-footprint-calculator-kit", "carbon-credit-tracker", "carbon-inventory-review-kit", "carbon-playbook-policy-pack"], "esg-climate"),
@@ -604,7 +604,7 @@ PIPELINE_NOT_BUILT = [
 
 UNREGISTERED = []  # all 10 confirmed as ValueBridge products on 31 Oct 2026
 
-SUPERSEDED = [("Inkwell PDF Signer", "PDF Studio"), ("Dayline Planner", "Tempo"), ("CV Kit", "Resume Studio"),
+SUPERSEDED = [("Inkwell PDF Signer", "PDF Studio"), ("Dayline Planner", "Thrustline"), ("CV Kit", "Resume Studio"),
               ("Cash Flow tool", "Financial Dashboard Kit"), ("Debt Calculator", "Personal Budget System"),
               ("Social Media Calendar", "Social Media & Branding Kit"),
               ("Quality, Compliance & EHS Toolkit; Compliance Obligations Register; CAPA Register", "Compliance Register Suite"),
@@ -636,35 +636,35 @@ for p in P:
 # trial_live: set True only after the owner approves the QA-04 Stage 1 trial and it passes G2 and G6; tools/build.py then
 # copies staging/try/<slug>/index.html to site/try/<slug>/ and shows the "Try it free" button.
 DETAILS = {
-    "tempo": {
-        "title": "Tempo: Offline Planner and Time-Blocking App | ValueBridge",
-        "description": "ValueBridge Tempo plans your day: tasks, auto-scheduling around meetings, focus timer, habits and reviews. Runs in your browser; data stays on your device.",
-        "lead": "Type a task the way you'd say it, press Auto-plan, and Tempo fits your work into the free time around your meetings. Tasks, scheduling, a focus timer, habits and reviews in one private app that opens in your web browser on a computer, tablet or phone. No account, no subscription, and your plans stay on your own device.",
-        "video": {"file": "tempo-overview.mp4", "poster": "tempo-overview-poster.webp", "captions": "tempo-overview.vtt",
-                  "title": "ValueBridge Tempo in 73 seconds", "duration": "PT1M13S", "uploaded": "2026-11-07",
-                  "transcript": "Meet Tempo by ValueBridge: tasks, scheduling, focus and reviews in one private app that opens in your browser. The Today page shows how full your day is before it overfills, with your timeline and your three priorities. Type a task the way you'd say it. Tempo picks out the date, time, length, priority and project as you type. Press Auto-plan, and Tempo fits your tasks into free time around your meetings, by deadline, priority and energy, with buffers and your lunch kept clear. Drag any block to move it. While Tempo is open, alerts appear with a chime and snooze. Export to your calendar app for reminders when it's closed. Run timed focus sessions on a task, and Tempo logs the time for you. Habits and insights show your streaks, your meeting load, and how close your estimates are. It opens on your phone too. Add it to your home screen. One licence, no subscription, and your data stays on your device. Tempo, by ValueBridge.",
-                  "long": {"file": "tempo-walkthrough.mp4", "captions": "tempo-walkthrough.vtt", "label": "Watch the full walkthrough (2 min 38 s)"}},
+    "thrustline": {
+        "title": "Thrustline: Offline Planner and Time-Blocking App | ValueBridge",
+        "description": "ValueBridge Thrustline plans your day: tasks, auto-scheduling around meetings, focus timer, habits and reviews. Runs in your browser; data stays on your device.",
+        "lead": "Type a task the way you'd say it, press Auto-plan, and Thrustline fits your work into the free time around your meetings. Tasks, scheduling, a focus timer, habits and reviews in one private app that opens in your web browser on a computer, tablet or phone. No account, no subscription, and your plans stay on your own device.",
+        "video": {"file": "thrustline-overview.mp4", "poster": "thrustline-overview-poster.webp", "captions": "thrustline-overview.vtt",
+                  "title": "ValueBridge Thrustline in 74 seconds", "duration": "PT1M14S", "uploaded": "2026-11-14",
+                  "transcript": "Meet Thrustline by ValueBridge: tasks, scheduling, focus and reviews in one private app that opens in your browser. The Today page shows how full your day is before it overfills, with your timeline and your three priorities. Type a task the way you'd say it. Thrustline picks out the date, time, length, priority and project as you type. Press Auto-plan, and Thrustline fits your tasks into free time around your meetings, by deadline, priority and energy, with buffers and your lunch kept clear. Drag any block to move it. While Thrustline is open, alerts appear with a chime and snooze. Export to your calendar app for reminders when it's closed. Run timed focus sessions on a task, and Thrustline logs the time for you. Habits and insights show your streaks, your meeting load, and how close your estimates are. It opens on your phone too. Add it to your home screen. One licence, no subscription, and your data stays on your device. Thrustline, by ValueBridge.",
+                  "long": {"file": "thrustline-walkthrough.mp4", "captions": "thrustline-walkthrough.vtt", "label": "Watch the full walkthrough (2 min 41 s)"}},
         "gallery": [
-            ("tempo-today.webp", "Tempo's Today page with a capacity meter at 27%, a timeline of the day's meetings and a list of three suggested priorities", "Today: how full your day is, your timeline and your three priorities"),
-            ("tempo-quick-add.webp", "A task typed as a sentence in the quick-add box, with chips showing tomorrow 3 PM, 45 minutes, priority 1, project, deep work and a 15-minute alert", "Quick add reads dates, times, length, priority and project as you type"),
-            ("tempo-scheduler-auto-plan.webp", "Week view of the scheduler after Auto-plan, with meetings as solid blocks and planned task time as dashed blocks", "Auto-plan fits tasks into free time around your meetings"),
-            ("tempo-priority-matrix.webp", "Tasks arranged in four quadrants: do now, schedule, delegate or batch, and drop or defer", "The priority matrix view of your task list"),
-            ("tempo-focus-timer.webp", "Focus timer ring counting down from 25 minutes for a selected task, with a parking lot for stray thoughts", "Timed focus sessions that log time against a task"),
-            ("tempo-insights.webp", "Insights page with focus time this week, tasks completed, estimate accuracy and meeting load, and a bar chart of daily focus minutes", "Insights compare your estimates with the time you log"),
-            ("tempo-daily-review.webp", "Daily shutdown checklist with five steps, a box to pick tomorrow's three priorities and a notes area", "A daily shutdown and a weekly review"),
-            ("tempo-dark-mode.webp", "The scheduler week view in dark mode", "Dark mode follows your device setting"),
-            ("tempo-phone.webp", "Two phone screens: the Today page and the one-day scheduler", "On a phone: one-day scheduler and the same pages"),
+            ("thrustline-today.webp", "Thrustline's Today page with a capacity meter at 27%, a timeline of the day's meetings and a list of three suggested priorities", "Today: how full your day is, your timeline and your three priorities"),
+            ("thrustline-quick-add.webp", "A task typed as a sentence in the quick-add box, with chips showing tomorrow 3 PM, 45 minutes, priority 1, project, deep work and a 15-minute alert", "Quick add reads dates, times, length, priority and project as you type"),
+            ("thrustline-scheduler-auto-plan.webp", "Week view of the scheduler after Auto-plan, with meetings as solid blocks and planned task time as dashed blocks", "Auto-plan fits tasks into free time around your meetings"),
+            ("thrustline-priority-matrix.webp", "Tasks arranged in four quadrants: do now, schedule, delegate or batch, and drop or defer", "The priority matrix view of your task list"),
+            ("thrustline-focus-timer.webp", "Focus timer ring counting down from 25 minutes for a selected task, with a parking lot for stray thoughts", "Timed focus sessions that log time against a task"),
+            ("thrustline-insights.webp", "Insights page with focus time this week, tasks completed, estimate accuracy and meeting load, and a bar chart of daily focus minutes", "Insights compare your estimates with the time you log"),
+            ("thrustline-daily-review.webp", "Daily shutdown checklist with five steps, a box to pick tomorrow's three priorities and a notes area", "A daily shutdown and a weekly review"),
+            ("thrustline-dark-mode.webp", "The scheduler week view in dark mode", "Dark mode follows your device setting"),
+            ("thrustline-phone.webp", "Two phone screens: the Today page and the one-day scheduler", "On a phone: one-day scheduler and the same pages"),
         ],
-        "social_image": "tempo-social.jpg",
+        "social_image": "thrustline-social.jpg",
         "who": [
             "Freelancers, consultants and small-business owners juggling client work and admin",
             "Managers and professionals who want time blocking without a subscription or a cloud account",
             "Anyone who prefers their plans, habits and notes to stay on their own device",
         ],
         "steps": [
-            ("Open the file", "Double-click ValueBridge_Tempo.html to open it in your web browser. On a phone, open it and add it to your home screen."),
+            ("Open the file", "Double-click ValueBridge_Thrustline.html to open it in your web browser. On a phone, open it and add it to your home screen."),
             ("Set your working day", "Choose your hours, working days, lunch break and whether you focus best in the morning or the afternoon."),
-            ("Type your tasks", "Write them as sentences, for example: “Send proposal tomorrow 3pm 45m !1 #client”. Tempo picks out the details."),
+            ("Type your tasks", "Write them as sentences, for example: “Send proposal tomorrow 3pm 45m !1 #client”. Thrustline picks out the details."),
             ("Auto-plan and focus", "Press Auto-plan to place tasks in your free time, then work through the blocks with the focus timer."),
         ],
         "features": [
@@ -672,7 +672,7 @@ DETAILS = {
             ("Tasks", "Quick add in plain sentences, projects, priorities 1 to 4, checklists, repeating tasks, and list or priority-matrix views."),
             ("Scheduler", "Week view on a computer and day view on a phone. Drag blocks to move them in 15-minute steps. Auto-plan 7 days, with undo and a list of tasks that land after their due date."),
             ("Planning rules you set", "Buffer around meetings, a protected lunch, a daily deep-work limit and a share of each day kept free for surprises."),
-            ("Alerts", "While Tempo is open: banners with a chime and snooze before meetings and task blocks, a morning briefing and an end-of-day reminder. Browser notifications where your browser allows them."),
+            ("Alerts", "While Thrustline is open: banners with a chime and snooze before meetings and task blocks, a morning briefing and an end-of-day reminder. Browser notifications where your browser allows them."),
             ("Focus timer", "Timed work and break sessions linked to a task, with the time logged against it and a parking lot for stray thoughts."),
             ("Habits and insights", "Weekly habit targets, streaks and 16 weeks of history. Focus trend, tasks completed, meeting load and how your estimates compare with the time you log."),
             ("Reviews", "A daily shutdown checklist and a weekly review, with notes kept by date."),
@@ -680,14 +680,14 @@ DETAILS = {
             ("Comfort", "Dark mode, 12- or 24-hour clock, keyboard shortcuts and a command search (Ctrl K)."),
         ],
         "files": [
-            ("ValueBridge_Tempo.html", "the app, a single file of about 300 KB"),
+            ("ValueBridge_Thrustline.html", "the app, a single file of about 300 KB"),
             ("User Guide (PDF)", "setup, the quick-add words, planning, alerts, backups and troubleshooting"),
             ("README, LICENSE, CHANGELOG and THIRD_PARTY_NOTICES", "plain-text files"),
         ],
         "requirements": "A current web browser on a computer, tablet or phone, with permission to open a downloaded file. We test on real browsers and devices before release and will list the ones we have tested here.",
         "limits": [
             "No automatic sync between devices. Use the backup text to copy your data from one device to another.",
-            "Tempo cannot alert you when its tab is closed, because browsers stop a page's alerts then. Export to your calendar app for those reminders.",
+            "Thrustline cannot alert you when its tab is closed, because browsers stop a page's alerts then. Export to your calendar app for those reminders.",
             "Calendar export only: no calendar import or two-way sync.",
             "A personal planner: no team sharing or delegation.",
             "Uses your device's time zone. English only.",
@@ -697,16 +697,16 @@ DETAILS = {
                            ("Keeps your data between visits", "No: cleared when you close the tab", "Yes, in your browser"),
                            ("Backup, restore, calendar and CSV export", "No", "Yes"), ("Works without an internet connection", "After the page loads", "Yes")]},
         "faq": [
-            ("Do I need an account or an internet connection?", "No account. Tempo is a file you open in your browser, and once it is open it runs without an internet connection. It does not upload your tasks, calendar or notes."),
+            ("Do I need an account or an internet connection?", "No account. Thrustline is a file you open in your browser, and once it is open it runs without an internet connection. It does not upload your tasks, calendar or notes."),
             ("Is this a subscription?", "No. It is a one-time licence, and minor updates within version 1 are free."),
-            ("Will Tempo remind me when it is closed?", "Not by itself: browsers stop a page's alerts when its tab is closed. Export your plan to Google Calendar, Outlook or Apple Calendar (.ics) and let that app send those reminders."),
+            ("Will Thrustline remind me when it is closed?", "Not by itself: browsers stop a page's alerts when its tab is closed. Export your plan to Google Calendar, Outlook or Apple Calendar (.ics) and let that app send those reminders."),
             ("Can I use it on my phone and my computer?", "Yes. The Standard licence covers up to 3 devices. Your data does not sync on its own; copy it between devices with the backup text in Settings."),
-            ("What happens to my data if I clear my browser?", "Clearing a browser's site data erases Tempo's data on that device. Keep a backup: Settings, Your data, Back up."),
-            ("How is Tempo different from ValueBridge Dueline?", "Tempo plans your days and weeks: tasks, time blocks and focus. Dueline keeps track of long-range dates such as renewals, expiry dates and birthdays."),
+            ("What happens to my data if I clear my browser?", "Clearing a browser's site data erases Thrustline's data on that device. Keep a backup: Settings, Your data, Back up."),
+            ("How is Thrustline different from ValueBridge Dueline?", "Thrustline plans your days and weeks: tasks, time blocks and focus. Dueline keeps track of long-range dates such as renewals, expiry dates and birthdays."),
             ("Can I try it before I buy?", "A free trial version with sample data is planned for this page. It will keep nothing after you close the tab and will leave out backup and export."),
         ],
         "licence": "One-time licence for one person or organisation on up to 3 devices (Standard). Free minor updates within version 1. Not for resale or redistribution. Full licence, terms of sale and refund policy will be on our Store policies page before release.",
-        "privacy": "Tempo does not upload your tasks, calendar, habits or notes, and the app makes no network requests of its own. Your data is stored in your browser on your device: back up regularly. ValueBridge is not responsible for data lost through browser changes, device failure or clearing site data.",
+        "privacy": "Thrustline does not upload your tasks, calendar, habits or notes, and the app makes no network requests of its own. Your data is stored in your browser on your device: back up regularly. ValueBridge is not responsible for data lost through browser changes, device failure or clearing site data.",
         "affiliation": "ValueBridge is independent and not affiliated with, endorsed by or sponsored by Google, Microsoft or Apple. Google Calendar, Outlook and Apple Calendar are named only to describe the calendar export. All trademarks belong to their owners.",
         "trial_live": False,
     },
