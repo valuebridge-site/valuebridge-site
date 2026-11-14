@@ -42,7 +42,7 @@ The Buy button uses Lemon Squeezy's overlay checkout (`lemon.js`), loaded only o
 
 ## Full product pages
 
-A product with an entry in `DETAILS` (end of `data/catalog.py`) gets a full page: video with captions and transcript, screenshots, who it's for, how it works, features, requirements, limits, FAQ, licence, Open Graph tags and structured data (BreadcrumbList, SoftwareApplication, VideoObject; an Offer is added only once the product is released). Images and videos live in `site/assets/products/<slug>/`. Tempo is the first product with one.
+A product with an entry in `DETAILS` (end of `data/catalog.py`) gets a full page: video with captions and transcript, screenshots, who it's for, how it works, features, requirements, limits, FAQ, licence, Open Graph tags and structured data (BreadcrumbList, SoftwareApplication, VideoObject; an Offer is added only once the product is released). Images and videos live in `site/assets/products/<slug>/`. Thrustline is the first product with one.
 
 ## Free trial builds (QA-04 Stage 1)
 

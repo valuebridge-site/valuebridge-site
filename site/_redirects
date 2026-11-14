@@ -1,0 +1,4 @@
+# The planner was listed at these addresses until 14 Nov 2026
+/products/tempo.html /products/thrustline.html 301
+/products/tempo /products/thrustline 301
+/try/tempo/* /try/thrustline/:splat 301
